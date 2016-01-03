@@ -7,7 +7,7 @@ require 'mail'
 require 'hashdiff'
 
 require_relative 'result_scraper'
-require_relative 'mail_config'
+require_relative 'config/mail'
 
 LAST_RESULTS_FILE = 'last_results.cache'
 
