@@ -1,5 +1,4 @@
 env :PATH, ENV['PATH']
-env :GEM_PATH, ENV['GEM_PATH']
 
 set :output, 'log/cron.log'
 
