@@ -1,7 +1,6 @@
 require 'capybara/dsl'
 require 'capybara/poltergeist'
 
-# Capybara.default_driver = :selenium
 Capybara.default_driver = :poltergeist
 
 class ResultScraper
@@ -39,26 +38,36 @@ class ResultScraper
   end
 
   def check_components
+    cells = find(:table, 'Overall module result')
+      .all('tbody tr')
+      .select{ |r| r.has_no_selector? 'th' }
+      .first
+      .all('td')
+
+    module_title = cells[2].text
+
     find(:table, 'Assessment components').all('tbody tr').each do |row|
       # table header cells in tbody... sigh
       next unless row.has_no_selector? 'th'
 
       cells = row.all 'td'
-      title = cells[0].text
+      assessment_title = cells[0].text
       weight = cells[1].text
       unconfirmed = cells[3].text
       mark = cells[4].text
 
+      full_name = "[#{module_title}] #{assessment_title}"
+
       mark_text = if mark != '-'
                     "#{mark}%"
                   elsif unconfirmed == '-'
-                    '-'
+                    '(NO RESULT)'
                   else
                     "#{unconfirmed}% (UNCONFIRMED)"
                   end
 
-      fail "Assessment `#{title}` already seen" unless results[title].nil?
-      results[title] = mark_text
+      fail "Assessment `#{full_name}` already seen" unless results[full_name].nil?
+      results[full_name] = mark_text
     end
   end
 
