@@ -16,8 +16,8 @@ def mail_results(diff_lines)
   puts diff_body
 
   Mail.deliver do
-    to ENV['GMAIL_EMAIL']
-    from "eVision Bot <#{ENV['GMAIL_EMAIL']}>"
+    to ENV.fetch('GMAIL_EMAIL')
+    from "eVision Bot <#{ENV.fetch('GMAIL_EMAIL')}>"
 
     subject 'eVision Assessment Change'
     body <<EOF
@@ -63,7 +63,13 @@ end
 
 scraper = ResultScraper.new
 
+options = {
+  host: ENV.fetch('EVISION_HOST'),
+  username: ENV.fetch('EVISION_USERNAME'),
+  password: Base64.decode64(ENV.fetch('EVISION_PASSWORD'))
+}
+
 puts '[*] Scraping'
-scraper.scrape host: ENV['EVISION_HOST'], username: ENV['EVISION_USERNAME'], password: Base64.decode64(ENV['EVISION_PASSWORD'])
+scraper.scrape options
 
 scrape_finished scraper.results

@@ -3,9 +3,9 @@ require 'mail'
 Mail.defaults do
   delivery_method :smtp,       address: 'smtp.gmail.com',
                                port: 587,
-                               domain: 'saulr.me',
-                               user_name: ENV['GMAIL_EMAIL'],
-                               password: ENV['GMAIL_PASSWORD'],
+                               domain: 'evision-results-mailer.local',
+                               user_name: ENV.fetch('GMAIL_EMAIL'),
+                               password: ENV.fetch('GMAIL_PASSWORD'),
                                authentication: 'plain',
                                enable_starttls_auto: true
 end
